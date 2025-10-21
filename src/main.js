@@ -31,30 +31,6 @@ async function hideLoader() {
   loader.style.display = 'none';
   content.style.display = 'block';
   initAnimations();
-  startTyping();
-}
-
-const words = ['<Hello World/>', 'console.log("Hello JS");', 'print("Hello Python")', 'fmt.Println("Hello Go")', 'System.out.println("Java")'];
-const typingEl = document.getElementById('typing');
-let wordIndex = 0, charIndex = 0, deleting = false;
-
-function startTyping() {
-  const current = words[wordIndex];
-  typingEl.textContent = current.substring(0, charIndex);
-  if (!deleting && charIndex < current.length) {
-    charIndex++;
-    setTimeout(startTyping, 80);
-  } else if (deleting && charIndex > 0) {
-    charIndex--;
-    setTimeout(startTyping, 40);
-  } else if (!deleting && charIndex === current.length) {
-    deleting = true;
-    setTimeout(startTyping, 2000);
-  } else if (deleting && charIndex === 0) {
-    deleting = false;
-    wordIndex = (wordIndex + 1) % words.length;
-    setTimeout(startTyping, 300);
-  }
 }
 
 let lastScroll = 0;
@@ -150,13 +126,6 @@ window.addEventListener('scroll', () => {
   });
 });
 
-window.addEventListener('scroll', () => {
-  const hero = document.querySelector('.hero');
-  const scrolled = window.pageYOffset;
-  if (hero && scrolled < window.innerHeight) {
-    hero.style.transform = `translateY(${scrolled * 0.5}px)`;
-  }
-});
 
 const cursorGlow = document.querySelector('.cursor-glow');
 let mouseX = 0;
