@@ -244,6 +244,7 @@ async function loadPricingPlans() {
     }
   } catch (error) {
     console.error('Error loading pricing plans:', error);
+    throw error;
   }
 }
 
@@ -299,9 +300,14 @@ if (bookingForm) {
 }
 
 async function init() {
-  await initMacOSLoader();
-  await loadPricingPlans();
-  await hideLoader();
+  try {
+    await initMacOSLoader();
+    await loadPricingPlans();
+  } catch (error) {
+    console.error('Initialization error:', error);
+  } finally {
+    await hideLoader();
+  }
 }
 
 init();
