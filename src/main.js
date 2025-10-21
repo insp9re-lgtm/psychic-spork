@@ -5,28 +5,33 @@ const loader = document.getElementById('loader');
 const content = document.getElementById('content');
 const lines = document.querySelector('#terminal-content');
 
-function initMacOSLoader() {
+async function initMacOSLoader() {
   let index = 0;
   const text = lines.textContent;
   lines.textContent = '';
 
-  const interval = setInterval(() => {
-    if (index < text.length) {
-      lines.textContent += text[index++];
-    } else {
-      clearInterval(interval);
-      setTimeout(() => {
-        loader.style.opacity = '0';
-        loader.style.transition = 'opacity 0.5s ease';
+  return new Promise((resolve) => {
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        lines.textContent += text[index++];
+      } else {
+        clearInterval(interval);
         setTimeout(() => {
-          loader.style.display = 'none';
-          content.style.display = 'block';
-          initAnimations();
-          startTyping();
-        }, 500);
-      }, 800);
-    }
-  }, 30);
+          resolve();
+        }, 800);
+      }
+    }, 30);
+  });
+}
+
+async function hideLoader() {
+  loader.style.opacity = '0';
+  loader.style.transition = 'opacity 0.5s ease';
+  await new Promise(resolve => setTimeout(resolve, 500));
+  loader.style.display = 'none';
+  content.style.display = 'block';
+  initAnimations();
+  startTyping();
 }
 
 const words = ['<Hello World/>', 'console.log("Hello JS");', 'print("Hello Python")', 'fmt.Println("Hello Go")', 'System.out.println("Java")'];
@@ -293,5 +298,10 @@ if (bookingForm) {
   });
 }
 
-initMacOSLoader();
-loadPricingPlans();
+async function init() {
+  await initMacOSLoader();
+  await loadPricingPlans();
+  await hideLoader();
+}
+
+init();
